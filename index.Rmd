@@ -1,7 +1,7 @@
 ---
 title: "Explainable AI, Uncertainty, and Environmental Modeling"
 author: 'Wesley S. Burr -- <a href="http://www.trentu.ca/math/">Trent University</a> <br> <a href="http://github.com/wesleyburr"><i class="fa fa-github fa-fw"></i>&nbsp; wsburr</a><br> <a href="http://twitter.com/wsburr"> <i class="fa fa-twitter fa-fw"></i>&nbsp; @wsburr</a><br> <a href="mailto:wesleyburr@trentu.ca"><i class="fa fa-paper-plane fa-fw"></i>&nbsp; wesleyburr@trentu.ca</a><br>'
-date: 2023-07-17 &ensp; <br><br> Slides available at <http://bit.ly/isi2023>
+date: 2023-07-17 &ensp; <br><br> Slides available at <http://bit.ly/isi_wsc_2023>
 output:
   xaringan::moon_reader:
     chakra: remark-latest.min.js
@@ -417,7 +417,7 @@ class: inverse, middle
 
 - Contact me: [Email](mailto:wesleyburr@trentu.ca) or [Twitter](https://twitter.com/wsburr)
 - Slides created via the R package [xaringan](https://github.com/yihui/xaringan) by Yihui Xie
-- Slides and source at <http://bit.ly/isi2023>
+- Slides and source at <http://bit.ly/isi_wsc_2023>
 - Code available at <a href="http://github.com/wesleyburr/explainableAI_Environmetrics">GitHub</a>
 
 <br/>
