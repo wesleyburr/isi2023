@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Explainable AI, Uncertainty, and Environmental Modeling</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Wesley S. Burr – Trent University     wsburr     @wsburr    wesleyburr@trentu.ca" />
+    <script src="https://use.fontawesome.com/5235085b15.js"></script>
+    <link rel="stylesheet" href="example.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Explainable AI, Uncertainty, and Environmental Modeling
+### Wesley S. Burr – <a href="http://www.trentu.ca/math/">Trent University</a> <br> <a href="http://github.com/wesleyburr"><i class="fa fa-github fa-fw"></i>  wsburr</a><br> <a href="http://twitter.com/wsburr"> <i class="fa fa-twitter fa-fw"></i>  <span class="citation">@wsburr</span></a><br> <a href="mailto:wesleyburr@trentu.ca"><i class="fa fa-paper-plane fa-fw"></i>  wesleyburr@trentu.ca</a><br>
+### 2023-07-17   <br><br> Slides available at <a href="http://bit.ly/isi2023" class="uri">http://bit.ly/isi2023</a>
+
+---
+
+
+class: inverse
+
+
+
+## What are Statisticians Good For?
+
+I like to tell my students that statistics is fundamentally a collaborative 
+discipline. We **quantify uncertainty** for the advancement of science. 
+
+---
+
+class: inverse
+
+## And What Do Statisticians Use?
+
+While nonparametric statistics is a vibrant and active area of research, 
+on average we're mostly interested in distributions - they're one of our 
+fundamental building blocks. 
+
+---
+
+class: inverse
+
+## Machine Learning: The Enemy?
+
+The explosion of scientific development in machine learning and artificial intelligence over the last 30 years, concurrent with the growth in CPU and GPU power to allow for such models to be readily accessible to the average scientist, has resulted in a sea change in statistical studies of the environment. 
+
+&lt;br/&gt;
+While technically parametric, in practice ... opaque, black-box methods!
+---
+
+class: inverse
+
+## Environmental Data Science &amp; Concerns
+
+The merging of the two fields - environmental statistics and data science - 
+has resulted in a new focus: Environmental Data Science, which uses a mixture
+of tools from both statistics and machine learning fields to tackle complex,
+environmental problems. 
+
+--
+
+&lt;br /&gt;
+
+Two primary concerns statisticians have had of the use of machine and deep learning neural network models are:
+
+&lt;br/&gt;
+
+* their lack of both uncertainty quantification
+* and inferential potential. 
+
+---
+
+class: inverse
+
+## Explainable AI (xAI)
+
+These two issues are an open area of research, and the development of 
+"Explainable AI" and "Interpretable AI" over the last few years 
+(2018-23) has aimed to mitigate these concerns. 
+
+&lt;br/&gt;
+
+Our collaborative working group examined the problem of explaining which 
+inputs are important, when modelling environmental data - this was a 
+TIES working group, after all!
+
+---
+
+class: inverse
+
+## Methods Covered
+
+We focused on three general model-agnostic methods for explainability:
+
+&lt;br/&gt;
+
+* feature shuffling
+* interpretable local surrogates (LIME)
+* occlusion analysis (Shapley values)
+
+---
+
+class: inverse
+
+## Feature Shuffling
+
+Originally developed for random forests (Breiman, 2001) and neural networks
+(Recknagel et al., 1997), under the goal of understanding interactions of variables:
+permutations of features to determine importance. 
+
+&lt;br/&gt;
+
+Recently (2019) extended by Aaron Fisher, Cynthia Rudin and Francesca Dominici to a 
+general variable importance framework suitable for any input-output model. This
+framework focuses on the problem of how much prediction models rely on specific covariates to achieve their accuracy.
+
+---
+
+class: inverse
+
+## Interpretable Local Surrogates 
+
+LIME was developed by Ribeiro et al. (2016) as an technique for
+explanation of the predictions of any classifier in an interpretable and
+faithful manner -- learning an interpretable model locally around the prediction.
+
+&lt;br/&gt;
+This is done by applying perturbations, generating **local** surrogates 
+(models which behave like the black-box model in a local sense) and then
+using the surrogates to explain the original black-box.
+
+
+---
+
+class: inverse
+
+## Shapley Values
+
+The last method considered is **old**: the original derivation of Shapley
+values was 1953, in the context of game theory and stable allocations. This
+method was part of the body of work that led Shapley to receive the 2012 Nobel
+Prize in Economics. 
+
+&lt;br/&gt;
+These values were adapted to classification of features in regression and
+machine learning models in 2001 by Lipovetsky and Conklin, and then developed
+further in 2014-2017, including the publication of the `SHAP` package for Python.
+
+---
+
+class: inverse
+
+## Methods Exist: How Well Do They Work?
+
+So methods exist to aide in the interpretion of machine learning models - 
+but how well do they work for our environmental statistics problems,
+and our traditional interests from such models?
+
+---
+
+class: inverse
+
+## The Test Problem
+
+To explore these methods, and determine their relative usefulness for
+environmental data science, we used a classic environmental statistics
+problem: **long-lead forecasting of monthly soil moisture in the North American 
+"corn belt", using sea surface temperature anomalies in the Pacific Ocean.**
+
+&lt;br/&gt;
+Data was available from 1948 to 2021, with 1948-2013 used for training,
+while data from 2014-2021 were used to assess model performance
+
+---
+
+class: inverse
+
+## Some Context for the Problem
+
+Successful long-lead forecasts are usually tied to the longer-time scale 
+dynamics of the ocean, and the long-distance atmospheric
+teleconnections induced by anomalous heating or cooling (ENSO phenomenon)
+at the ocean surface.
+
+&lt;br/&gt;
+Skillful long-lead forecasts based on statistical models that incorporate this 
+relationship are as good as, and typically better than, deterministic
+models. Although linear models can be skillful in these settings, nonlinear
+statistical methods often perform better than deterministic forecast models 
+at least for some spatial regions and lead times.
+
+
+---
+
+class: inverse
+
+## Models Considered
+
+As the focus is on the explainability, we limited the number of variant models. 
+Four variations of ANNs and two of CNNs were considered.
+
+* Persistence Forecast: soil moisture at 3 months lag
+* Climatology: average for that month and location across all training
+* Spatial Functional Linear Regression: for baseline comparison
+* XGBoost: gradient-boosted trees
+* Artificial Neural Networks (ANNs): classic neural network models
+* Convolutional Neural Networks (CNNs): regularized ANNs - feature extraction
+
+---
+
+class: top
+
+## Model Results (no Explainability)
+
+&lt;center&gt;
+&lt;img src="figure/results1.png" style="width: 800px;"/&gt;
+&lt;/center&gt;
+
+&lt;br/&gt;
+Results for All Months forecast, and May only, with persistence as baseline.
+---
+
+class: top, inverse
+
+## Spatial Functional Linear Model (Spatial FLM)
+
+* best performance for all models
+* tuned based on prior knowledge of problem
+
+&lt;br/&gt;
+
+&lt;center&gt;
+&lt;img src="figure/funclm_mspe_byloc.png" style="width: 800px;"/&gt;
+&lt;/center&gt;
+
+---
+
+class: inverse
+
+## Variable Importance Maps for Spatial FLM
+
+&lt;center&gt;
+&lt;img src="figure/MR_May.png" style="width: 350px;"/&gt; &amp;nbsp;
+&lt;img src="figure/coeff_surface.png" style="width: 350px;"/&gt;
+&lt;/center&gt;
+
+&lt;br/&gt;
+(Left) Model Reliance metric for predicting SM in the months of May -
+note the swaths `\(\leq 0\)` - equates to little importance
+&lt;br/&gt;
+(Right) functional regression coefficients at a sea surface location, 
+averaged for all SM locations in the corn belt - note the signs
+
+---
+
+class: inverse
+
+## XGBoost
+
+&lt;center&gt;
+&lt;img src="figure/xgboost.png" style="width: 600px;"/&gt;
+&lt;/center&gt;
+
+&lt;br/&gt;
+(A) gains; (B) absolute Shapley values; (C) May SM for 2016 (an El Niño year); (D) May SM for 2021.
+
+
+---
+
+class: inverse
+
+## CNNs and LIME
+
+&lt;center&gt;
+&lt;img src="figure/lime.png" style="width: 800px;"/&gt;
+&lt;/center&gt;
+
+&lt;br/&gt;
+(A) absolute LIME values averaged across 2014-21; and (B) absolute LIME
+values for 2016 alone. 
+
+&lt;br/&gt;
+Both for a CNN model applied to the entire sea surface
+data as input. 
+
+---
+
+class: inverse
+
+## Some Interpretation of the Interpretability
+
+
+* explainability approaches feasible, but definitively not trivial
+
+--
+
+* relative performance is an issue: hard to expand on explainability when the model
+simply does not fit as well as is possible
+
+--
+
+* It is not surprising that the linear model and the XGBoost models were skillful.
+    - We conjecture that the primary limitation here was the relatively small
+    training sample 
+    
+--
+
+* Although these methods tended to find coherent regions in the SSTA features 
+that were important for the predictions via explainability, they were
+not always in agreement. 
+
+
+---
+
+class: inverse
+
+## Continued Interpretation
+
+* the explainability metrics did provide suggestions for particular regions
+in the SSTA feature space that were important for individual instances
+
+--
+
+* challenges with the interpretability methods
+
+--
+
+    - the explainability methods all have difficulty when there is dependence in the predictors
+    
+--
+
+    - deep models (e.g., ANNs and CNNs) require the user to
+select many different hyperparameters with respect to model architecture -- this affects explainability, but how?
+
+--
+
+    - although the CNN models were not uniformly skillful, they did capture 
+    strong ENSO SSTA patterns of importance
+    
+---
+
+class: inverse
+
+## Key Take-Aways
+
+* proof of concept: explainability can be applied to machine learning models in the 
+context of environmental modeling
+
+--
+
+* tuning the models to work well first is more important than explainability - if the model does not work well, who cares what it is doing?
+
+--
+
+* once you have built a working (e.g., reasonably high `\(R^2\)` model), there **are** 
+options available to explain what it is doing
+
+--
+
+    - computational burden can be very, very high
+    
+--
+
+    - need to consider the input space carefully
+    
+---
+
+
+class: top, inverse
+
+## Working Group Thoughts
+
+* critical need for early community building
+
+--
+
+* inevitably, some contributors do more
+
+--
+
+* Zoom is sufficient for the 'discussion' part of the collaboration
+
+--
+
+* Zoom is **not** sufficient to replace the heads-together-working-it-out
+portion of a collaboration
+
+--
+
+* having someone with more experience and direction is critical
+
+--
+
+* having a really good idea what the desired output is at the start is very important
+
+--
+
+* not a good model for a poorly scoped problem **unless** the team knows each other well already
+
+
+---
+
+layout: false
+class: inverse, middle
+
+&lt;center&gt;
+&lt;a href="http://www.trentu.ca/math/"&gt;&lt;img src="figure/trent.png" style="width: 200px;"/&gt;&lt;/a&gt; &amp;emsp;&amp;emsp;
+&lt;a href="https://creativecommons.org/licenses/by/4.0/"&gt;&lt;img src="figure/cc.png" style="width: 200px;"/&gt;&lt;/a&gt;
+&lt;/center&gt;
+
+## With thanks to all of the collaborators (see &lt;a href="https://onlinelibrary.wiley.com/doi/10.1002/env.2772"&gt;our paper&lt;/a&gt;).
+
+- Contact me: [Email](mailto:wesleyburr@trentu.ca) or [Twitter](https://twitter.com/wsburr)
+- Slides created via the R package [xaringan](https://github.com/yihui/xaringan) by Yihui Xie
+- Slides and source at &lt;http://bit.ly/isi2023&gt;
+- Code available at &lt;a href="http://github.com/wesleyburr/explainableAI_Environmetrics"&gt;GitHub&lt;/a&gt;
+
+&lt;br/&gt;
+
+This project was done under The International Environmetrics Society's working
+group initiative, launched 2021 (and still ongoing!).
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "tomorrow-night-bright",
+"highlightLines": true,
+"highlightLanguage": "r"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
